@@ -1,0 +1,30 @@
+FROM alpine:3.20
+
+# Установка зависимостей
+RUN apk --no-cache --upgrade add \
+    build-base \
+    check-dev \
+    subunit-dev \
+    lcov \
+    gcc \
+    git \
+    make \
+    libtool \
+    automake \
+    autoconf \
+    linux-headers \
+    bash
+
+# Настройка рабочей директории
+WORKDIR /app
+
+# Копирование исходного кода
+COPY . .
+
+# Установка переменных окружения
+ENV CC=gcc
+ENV CFLAGS='-Wall -Werror -Wextra -std=c11'
+ENV LDFLAGS='-lm -lpthread -lrt -lsubunit'
+
+# Целевая команда
+CMD ["make", "test"]
